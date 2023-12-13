@@ -15,7 +15,7 @@ function dump($input)
     var_dump($input);
 }
 
-function dd($input){
+function dd($input = ''){
 	var_dump($input);
 	die();
 }
@@ -25,6 +25,7 @@ function ClearCLI() {
 }
 
 function pause() {
+    echo 'PAUSED';
     $handle = fopen ("php://stdin","r");
     do { $line = fgets($handle); } while ($line == '');
     fclose($handle);
@@ -43,4 +44,26 @@ function colorize($str, $type = 'blue'){
         default:
         break;
     }
+}
+
+function printMap(&$map, $symbols, $minX, $maxX, $minY, $maxY){
+    $line = '';
+    for($y = $minY; $y <= $maxY; $y++){
+        $line .= str_pad($y, '3') . ' ';
+        for($x = $minX; $x <= $maxX; $x++){
+            if(!isset($map[$x][$y])){
+                $char = colorize(" ", 'blue');
+            }else if(in_array($map[$x][$y], $symbols)) {
+                $char = colorize($map[$x][$y], 'blue');
+            }else if(in_array($map[$x][$y], range(0,9))){
+                $char = colorize($map[$x][$y], 'red');
+            }else{
+                $char = colorize($map[$x][$y], 'yellow');
+            }
+            $line .= $char;
+        }
+        $line .= PE;
+    }
+    echo $line. PE;
+
 }
